@@ -5,6 +5,13 @@
   --color-header: #f8f8f8;
   --color-bg: #f6f8ff;
   --color-white: #ffffff;
+  --color-text-secondary: #747474;
+  --color-low: #08a204;
+  --color-medium: #eab308;
+  --color-high: #f31e1f;
+  --color-not-start: #6b7280;
+  --color-pending: #3b82f6;
+  --color-completed: #16a34a;
 }
 
 @layer components {

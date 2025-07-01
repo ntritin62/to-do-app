@@ -2,7 +2,7 @@ import React from 'react';
 import NavLink from './NavLink';
 const Sidebar = () => {
   return (
-    <aside className="col-span-1 bg-primary rounded-r-xl">
+    <aside className="col-span-1 bg-primary rounded-r-xl shadow-xl">
       <div className="p-4">
         <ul className="mt-2 flex flex-col gap-2">
           <NavLink href="/">

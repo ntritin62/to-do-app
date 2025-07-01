@@ -17,10 +17,12 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Header />
-        <main className="grid grid-cols-4 gap-4 mt-15">
+        <div className="grid grid-cols-4 gap-20 mt-15 h-[calc(100vh-130px)]">
           <Sidebar />
-          <div className="col-span-3">{children}</div>
-        </main>
+          <main className="col-span-3 mr-20  border-[#BFC3CA] border-solid border-[2px] shadow-2xl bg-bg">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );
