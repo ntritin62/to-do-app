@@ -1,6 +1,7 @@
 import React from 'react';
 import { Task } from '@/type/task';
 import Image from 'next/image';
+import Dropdown from './Dropdown';
 
 type TaskCardProps = {
   task: Task;
@@ -57,21 +58,8 @@ const TaskCard = ({ task }: TaskCardProps) => {
           <span>{new Date(task.createdOn).toLocaleDateString()}</span>
         </p>
       </div>
-      <div className="absolute right-1 top-2 text-text-secondary">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="size-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
-          />
-        </svg>
+      <div className="absolute right-0 top-2 text-text-secondary">
+        <Dropdown />
       </div>
     </section>
   );
