@@ -23,7 +23,7 @@ const Sidebar = () => {
 
             <p>Dashboard</p>
           </NavLink>
-          <NavLink href="/tasks">
+          <NavLink href="/my-task">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

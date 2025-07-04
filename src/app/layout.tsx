@@ -19,7 +19,7 @@ export default function RootLayout({
         <Header />
         <div className="grid grid-cols-4 gap-20 mt-15 h-[calc(100vh-130px)]">
           <Sidebar />
-          <main className="col-span-3 mr-20  border-[#BFC3CA] border-solid border-[2px] shadow-2xl bg-bg">
+          <main className="mb-3 col-span-3 mr-20  border-[#BFC3CA] border-solid border-[2px] shadow-2xl bg-bg">
             {children}
           </main>
         </div>
