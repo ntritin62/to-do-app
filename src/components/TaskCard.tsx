@@ -2,6 +2,7 @@ import React from 'react';
 import { Task } from '@/type/task';
 import Image from 'next/image';
 import Dropdown from './Dropdown';
+import Link from 'next/link';
 
 type TaskCardProps = {
   task: Task;
@@ -38,7 +39,9 @@ const TaskCard = ({ task }: TaskCardProps) => {
       {circle}
       <div className="grid grid-cols-12">
         <div className="col-span-7">
-          <h2 className="font-bold">{title}</h2>
+          <Link href={`/my-task/${task.id}`}>
+            <h2 className="font-bold">{title}</h2>
+          </Link>
           <p className="line-clamp-3 text-text-secondary">{description}</p>
         </div>
         <div className="col-span-5 rounded-2xl overflow-hidden w-[88px] h-[88px] relative justify-self-end">
@@ -59,7 +62,7 @@ const TaskCard = ({ task }: TaskCardProps) => {
         </p>
       </div>
       <div className="absolute right-0 top-2 text-text-secondary">
-        <Dropdown />
+        <Dropdown task={task} />
       </div>
     </section>
   );

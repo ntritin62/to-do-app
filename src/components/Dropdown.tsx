@@ -1,6 +1,11 @@
+'use client';
 import React from 'react';
+import { Task } from '@/type/task';
+import { useModal } from '@/context/ModalContext';
+import TaskFormModal from './TaskFormModal';
 
-const Dropdown = () => {
+const Dropdown = ({ task }: { task: Task }) => {
+  const { openModal } = useModal();
   return (
     <>
       <details className="dropdown dropdown-end dropdown-bottom">
@@ -20,10 +25,14 @@ const Dropdown = () => {
             />
           </svg>
         </summary>
-        <ul className="menu dropdown-content bg-white rounded-box z-1 max-w-auto p-1 rounded-xl shadow-sm">
-          <li>
+        <ul className="menu dropdown-content bg-white rounded-box !z-10 max-w-auto p-1 rounded-xl shadow-sm">
+          <button
+            onClick={() => {
+              openModal(<TaskFormModal task={task} />);
+            }}
+          >
             <a>Edit</a>
-          </li>
+          </button>
           <li>
             <a>Delete</a>
           </li>

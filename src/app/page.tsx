@@ -5,6 +5,7 @@ import TaskCard from '@/components/TaskCard';
 import ProgressBarTab from '@/components/ProgressBarTab';
 import Wrapper from '@/components/Wrapper';
 import completedIcon from '@/assets/images/complete.svg';
+import Button from '@/components/Button';
 
 export const tasks: Task[] = [
   {
@@ -52,6 +53,27 @@ export default function Home() {
           <div className="flex items-center justify-between gap-3">
             <Image src={Pending} alt="Pending Tasks" width={24} height={24} />
             <h2 className="text-primary">To-Do</h2>
+          </div>
+          <div>
+            <Button>
+              <div className="flex gap-2 items-center text-primary cursor-pointer">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                  />
+                </svg>
+                <p className="text-text-secondary text-xs">Add task</p>
+              </div>
+            </Button>
           </div>
         </div>
         <div>
