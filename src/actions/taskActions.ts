@@ -2,6 +2,7 @@
 
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 // CREATE
 export async function createTask(formData: FormData) {
@@ -66,10 +67,49 @@ export async function updateTask(
 }
 
 // DELETE
-export async function deleteTask(id: string) {
+export async function deleteTask(formData: FormData) {
+  const id = formData.get('id') as string;
   await prisma.task.delete({
     where: { id },
   });
 
   revalidatePath('/');
+  redirect('/my-task');
+}
+
+export async function updateTaskStatus(formData: FormData) {
+  const id = formData.get('id') as string;
+  const currentStatus = formData.get('status') as string;
+
+  let nextStatus: 'in_progress' | 'done' | null = null;
+  if (currentStatus === 'not_started') nextStatus = 'in_progress';
+  else if (currentStatus === 'in_progress') nextStatus = 'done';
+
+  if (!id || !nextStatus) return;
+
+  await prisma.task.update({
+    where: { id },
+    data: { status: nextStatus },
+  });
+
+  revalidatePath('/');
+}
+
+export async function getTaskStatusStats() {
+  const [done, inProgress, notStarted, total] = await Promise.all([
+    prisma.task.count({ where: { status: 'done' } }),
+    prisma.task.count({ where: { status: 'in_progress' } }),
+    prisma.task.count({ where: { status: 'not_started' } }),
+    prisma.task.count(),
+  ]);
+
+  const toPercent = (count: number) =>
+    total === 0 ? 0 : Math.round((count / total) * 100);
+
+  return {
+    total,
+    done: toPercent(done),
+    inProgress: toPercent(inProgress),
+    notStarted: toPercent(notStarted),
+  };
 }

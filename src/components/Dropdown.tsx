@@ -3,9 +3,11 @@ import React from 'react';
 import { Task } from '@/generated/prisma';
 import { useModal } from '@/context/ModalContext';
 import TaskFormModal from './TaskFormModal';
+import { updateTaskStatus, deleteTask } from '@/actions/taskActions';
 
 const Dropdown = ({ task }: { task: Task }) => {
   const { openModal } = useModal();
+  const isFinishable = task.status !== 'done';
   return (
     <>
       <details className="dropdown dropdown-end dropdown-bottom">
@@ -26,19 +28,32 @@ const Dropdown = ({ task }: { task: Task }) => {
           </svg>
         </summary>
         <ul className="menu dropdown-content bg-white rounded-box !z-10 max-w-auto p-1 rounded-xl shadow-sm">
-          <button
-            onClick={() => {
-              openModal(<TaskFormModal task={task} />);
-            }}
-          >
-            <a>Edit</a>
-          </button>
           <li>
-            <a>Delete</a>
+            <button
+              onClick={() => {
+                openModal(<TaskFormModal task={task} />);
+              }}
+            >
+              <a>Edit</a>
+            </button>
           </li>
           <li>
-            <a>Finish</a>
+            <form action={deleteTask}>
+              <input type="hidden" name="id" value={task.id} />
+              <button type="submit">Delete</button>
+            </form>
           </li>
+          {isFinishable && (
+            <li>
+              <form action={updateTaskStatus}>
+                <input type="hidden" name="id" value={task.id} />
+                <input type="hidden" name="status" value={task.status} />
+                <button type="submit">
+                  {task.status === 'not_started' ? 'Start' : 'Finish'}
+                </button>
+              </form>
+            </li>
+          )}
         </ul>
       </details>
     </>

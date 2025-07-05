@@ -1,53 +1,17 @@
 import Image from 'next/image';
 import Pending from '@/assets/images/pending.svg';
-import { Task } from '@/type/task';
+import { Task } from '@/generated/prisma';
 import TaskCard from '@/components/TaskCard';
 import ProgressBarTab from '@/components/ProgressBarTab';
 import Wrapper from '@/components/Wrapper';
 import completedIcon from '@/assets/images/complete.svg';
 import Button from '@/components/Button';
+import { getAllTasks } from '@/actions/taskActions';
 
-export const tasks: Task[] = [
-  {
-    id: '1',
-    title: 'Thiết kế giao diện đăng nhập',
-    description: 'Tạo mockup cho trang đăng nhập bằng Figma',
-    priority: 'medium',
-    status: 'not-started',
-    imageUrl:
-      'https://tiktak.com.vn/wp-content/uploads/2024/04/dieu-hanh-cuoc-hop-hieu-qua-2.jpg',
-    createdOn: new Date('2025-07-01T08:00:00Z'),
-    dueDate: new Date('2025-07-05T17:00:00Z'),
-  },
-  {
-    id: '2',
-    title: 'Xây dựng API xác thực người dùng',
-    description: 'Tạo API login, register, và reset password',
-    priority: 'high',
-    status: 'in-progress',
-    imageUrl:
-      'https://tiktak.com.vn/wp-content/uploads/2024/04/dieu-hanh-cuoc-hop-hieu-qua-2.jpg',
-    createdOn: new Date('2025-06-29T10:30:00Z'),
-    updatedOn: new Date('2025-07-01T14:45:00Z'),
-    dueDate: new Date('2025-07-03T23:59:59Z'),
-  },
-  {
-    id: '3',
-    title: 'Viết tài liệu hướng dẫn sử dụng hệ thống',
-    description: 'Tài liệu dành cho người dùng cuối, có ảnh minh họa',
-    priority: 'low',
-    status: 'done',
-    imageUrl:
-      'https://tiktak.com.vn/wp-content/uploads/2024/04/dieu-hanh-cuoc-hop-hieu-qua-2.jpg',
-    createdOn: new Date('2025-06-20T09:00:00Z'),
-    updatedOn: new Date('2025-06-25T16:00:00Z'),
-    dueDate: new Date('2025-06-26T00:00:00Z'),
-  },
-];
-
-export default function Home() {
+export default async function Home() {
+  const tasks: Task[] = await getAllTasks();
   return (
-    <div className="col-span-3 p-8 grid grid-cols-2 gap-4">
+    <div className="col-span-3 p-8 grid grid-cols-2 gap-4 min-h-[700px]">
       <Wrapper className="col-span-1">
         <div className="flex items-center justify-between">
           <div className="flex items-center justify-between gap-3 mb-2">
@@ -76,7 +40,7 @@ export default function Home() {
             </Button>
           </div>
         </div>
-        <div>
+        <div className="max-h-[550px] overflow-y-auto">
           <ul className="flex flex-col gap-4">
             {tasks.map((task) => (
               <li key={task.id}>
@@ -103,11 +67,13 @@ export default function Home() {
             </div>
           </div>
           <ul className="mt-3 overflow-y-auto max-h-[300px] flex flex-col gap-4">
-            {tasks.map((task) => (
-              <li key={task.id}>
-                <TaskCard task={task} />
-              </li>
-            ))}
+            {tasks
+              .filter((task) => task.status === 'done')
+              .map((task) => (
+                <li key={task.id}>
+                  <TaskCard task={task} />
+                </li>
+              ))}
           </ul>
         </Wrapper>
       </div>

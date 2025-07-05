@@ -3,45 +3,7 @@ import Wrapper from '@/components/Wrapper';
 import { Task } from '@/generated/prisma';
 import TaskCard from '@/components/TaskCard';
 import { getAllTasks } from '@/actions/taskActions';
-// import Image from 'next/image';
 import Button from '@/components/Button';
-// export const tasks: Task[] = [
-//   {
-//     id: '1',
-//     title: 'Thiết kế giao diện đăng nhập',
-//     description: 'Tạo mockup cho trang đăng nhập bằng Figma',
-//     priority: 'medium',
-//     status: 'not-started',
-//     // imageUrl:
-//     //   'https://tiktak.com.vn/wp-content/uploads/2024/04/dieu-hanh-cuoc-hop-hieu-qua-2.jpg',
-//     createdOn: new Date('2025-07-01T08:00:00Z'),
-//     dueDate: new Date('2025-07-05T17:00:00Z'),
-//   },
-//   {
-//     id: '2',
-//     title: 'Xây dựng API xác thực người dùng',
-//     description: 'Tạo API login, register, và reset password',
-//     priority: 'high',
-//     status: 'in-progress',
-//     // imageUrl:
-//     //   'https://tiktak.com.vn/wp-content/uploads/2024/04/dieu-hanh-cuoc-hop-hieu-qua-2.jpg',
-//     createdOn: new Date('2025-06-29T10:30:00Z'),
-//     updatedOn: new Date('2025-07-01T14:45:00Z'),
-//     dueDate: new Date('2025-07-03T23:59:59Z'),
-//   },
-//   {
-//     id: '3',
-//     title: 'Viết tài liệu hướng dẫn sử dụng hệ thống',
-//     description: 'Tài liệu dành cho người dùng cuối, có ảnh minh họa',
-//     priority: 'low',
-//     status: 'done',
-//     // imageUrl:
-//     //   'https://tiktak.com.vn/wp-content/uploads/2024/04/dieu-hanh-cuoc-hop-hieu-qua-2.jpg',
-//     createdOn: new Date('2025-06-20T09:00:00Z'),
-//     updatedOn: new Date('2025-06-25T16:00:00Z'),
-//     dueDate: new Date('2025-06-26T00:00:00Z'),
-//   },
-// ];
 const MyTaskLayout = async ({ children }: { children: React.ReactNode }) => {
   const tasks: Task[] = await getAllTasks();
   return (
