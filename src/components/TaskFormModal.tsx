@@ -1,33 +1,37 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useModal } from '@/context/ModalContext';
-import { Task } from '@/type/task';
+import { Task } from '@/generated/prisma';
+import { createTask, updateTask } from '@/actions/taskActions';
+import { useActionState } from 'react';
 
 type TaskFormModalProps = {
   task?: Task;
 };
 
 export default function TaskFormModal({ task }: TaskFormModalProps) {
+  const isEdit = !!task;
   const { closeModal } = useModal();
-  const [title, setTitle] = useState('');
-  const [date, setDate] = useState('');
-  const [priority, setPriority] = useState('');
-  const [description, setDescription] = useState('');
+
+  const [formState, formAction, isPending] = useActionState(
+    (_: any, formData: FormData) =>
+      isEdit
+        ? updateTask(task!.id, task.status, formData)
+        : createTask(formData),
+    { success: false }
+  );
 
   useEffect(() => {
-    if (task) {
-      setTitle(task.title || '');
-      const formattedDate = task.dueDate
-        ? task.dueDate.toISOString().split('T')[0]
-        : '';
-
-      setDate(formattedDate);
-      setPriority(task.priority || '');
-      setDescription(task.description || '');
+    if (formState.success) {
+      closeModal();
     }
-  }, [task]);
+  }, [formState.success, closeModal]);
 
-  const formTitle = task ? 'Edit Task' : 'Add New Task';
+  const formattedDate = task?.dueDate
+    ? task.dueDate.toISOString().split('T')[0]
+    : '';
+
+  const formTitle = isEdit ? 'Edit Task' : 'Add New Task';
 
   return (
     <div className="bg-white w-[700px] rounded-md p-6">
@@ -43,14 +47,14 @@ export default function TaskFormModal({ task }: TaskFormModalProps) {
       </div>
 
       {/* Form */}
-      <form className="border p-4 rounded space-y-4">
+      <form action={formAction} className="border p-4 rounded space-y-4">
         {/* Title */}
         <div>
           <label className="block mb-1 font-semibold">Title</label>
           <input
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            name="title"
+            defaultValue={task?.title ?? ''}
             className="w-full border rounded px-3 py-1.5 outline-none"
           />
         </div>
@@ -60,8 +64,8 @@ export default function TaskFormModal({ task }: TaskFormModalProps) {
           <label className="block mb-1 font-semibold">Date</label>
           <input
             type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
+            name="dueDate"
+            defaultValue={formattedDate}
             className="w-full border rounded px-3 py-1.5 outline-none"
           />
         </div>
@@ -70,82 +74,53 @@ export default function TaskFormModal({ task }: TaskFormModalProps) {
         <div>
           <label className="block mb-1 font-semibold">Priority</label>
           <div className="flex items-center gap-6">
-            <label className="flex items-center gap-1">
-              <input
-                type="radio"
-                name="priority"
-                value="high"
-                checked={priority === 'high'}
-                onChange={() => setPriority('high')}
-              />
-              <span className="text-red-500">●</span> high
-            </label>
-
-            <label className="flex items-center gap-1">
-              <input
-                type="radio"
-                name="priority"
-                value="medium"
-                checked={priority === 'medium'}
-                onChange={() => setPriority('medium')}
-              />
-              <span className="text-blue-400">●</span> medium
-            </label>
-
-            <label className="flex items-center gap-1">
-              <input
-                type="radio"
-                name="priority"
-                value="low"
-                checked={priority === 'low'}
-                onChange={() => setPriority('low')}
-              />
-              <span className="text-green-500">●</span> Low
-            </label>
+            {(['high', 'medium', 'low'] as const).map((level) => (
+              <label key={level} className="flex items-center gap-1">
+                <input
+                  type="radio"
+                  name="priority"
+                  value={level}
+                  defaultChecked={task?.priority === level}
+                />
+                <span
+                  className={`${
+                    level === 'high'
+                      ? 'text-red-500'
+                      : level === 'medium'
+                      ? 'text-blue-400'
+                      : 'text-green-500'
+                  }`}
+                >
+                  ●
+                </span>{' '}
+                {level}
+              </label>
+            ))}
           </div>
         </div>
 
-        {/* Task Description & Upload */}
-        <div className="grid gap-4">
-          <div>
-            <label className="block mb-1 font-semibold">Task Description</label>
-            <textarea
-              className="w-full h-32 border rounded px-3 py-2 resize-none outline-none"
-              placeholder="Start writing here…..."
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </div>
+        {/* Description */}
+        <div>
+          <label className="block mb-1 font-semibold">Task Description</label>
+          <textarea
+            name="description"
+            defaultValue={task?.description ?? ''}
+            className="w-full h-32 border rounded px-3 py-2 resize-none outline-none"
+            placeholder="Start writing here…..."
+          />
+        </div>
 
-          {/* <div>
-            <label className="block mb-1 font-semibold">Upload Image</label>
-            <div className="border border-gray-300 rounded p-4 flex flex-col items-center justify-center h-32 text-center text-sm text-gray-500">
-              <div className="mb-2 text-3xl">🖼️</div>
-              <div>
-                Drag&Drop files here
-                <br />
-                or
-              </div>
-              <button className="mt-2 px-3 py-1 border border-gray-300 rounded">
-                Browse
-              </button>
-            </div>
-          </div> */}
+        {/* Submit */}
+        <div className="mt-6">
+          <button
+            type="submit"
+            disabled={isPending}
+            className="bg-primary text-white px-6 py-2 rounded shadow hover:bg-orange-600 disabled:opacity-50"
+          >
+            {isPending ? 'Saving...' : 'Done'}
+          </button>
         </div>
       </form>
-
-      <div className="mt-6">
-        <button
-          className="bg-primary text-white px-6 py-2 rounded shadow hover:bg-orange-600"
-          onClick={(e) => {
-            e.preventDefault();
-            console.log({ title, date, priority, description });
-            closeModal();
-          }}
-        >
-          Done
-        </button>
-      </div>
     </div>
   );
 }

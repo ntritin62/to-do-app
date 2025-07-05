@@ -2,7 +2,7 @@
 import React from 'react';
 import { useModal } from '@/context/ModalContext';
 import TaskFormModal from './TaskFormModal';
-import { Task } from '@/type/task';
+import { Task } from '@/generated/prisma';
 
 const Button = ({
   children,

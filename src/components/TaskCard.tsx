@@ -1,6 +1,6 @@
 import React from 'react';
-import { Task } from '@/type/task';
 import Image from 'next/image';
+import { Task } from '@/generated/prisma';
 import Dropdown from './Dropdown';
 import Link from 'next/link';
 
@@ -10,14 +10,16 @@ type TaskCardProps = {
 
 const TaskCard = ({ task }: TaskCardProps) => {
   const { title, description, priority, status } = task;
+  const statusBorderMap: Record<string, string> = {
+    done: 'border-completed',
+    in_progress: 'border-pending',
+    not_started: 'border-not-start',
+  };
+
   const circle = (
     <div
       className={`top-2 left-2 absolute w-4 h-4 border-[2px] rounded-full bg-transparent ${
-        status === 'done'
-          ? 'border-completed'
-          : status === 'in-progress'
-          ? 'border-pending'
-          : 'border-not-start'
+        statusBorderMap[status] ?? ''
       }`}
     />
   );
@@ -29,8 +31,8 @@ const TaskCard = ({ task }: TaskCardProps) => {
   };
 
   const statusColorMap = {
-    'not-started': 'text-not-start',
-    'in-progress': 'text-pending',
+    not_started: 'text-not-start',
+    in_progress: 'text-pending',
     done: 'text-completed',
   };
 

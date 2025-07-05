@@ -1,23 +1,19 @@
-import React from 'react';
-import { Task } from '@/type/task';
-import Image from 'next/image';
+import { Task } from '@/generated/prisma';
+import { notFound } from 'next/navigation';
 import Button from '@/components/Button';
-const task: Task = {
-  id: '3',
-  title: 'Viết tài liệu hướng dẫn sử dụng hệ thống',
-  description:
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur enim perspiciatis ipsum aliquid! Perspiciatis, omnis. Sequi amet accusantium, tempore laboriosam provident illo consectetur quaerat vel nisi reiciendis atque nihil, tempora cumque ex asperiores sapiente minus numquam odit! Nihil, optio, ex harum nobis corporis sequi aspernatur amet adipisci consectetur ab illum, voluptas odit corrupti distinctio repellendus sapiente aliquam. Quasi, ipsum quos dignissimos unde quo modi? Nulla, optio culpa. Aspernatur sequi atque fugit quae dolores consectetur, dolore odit facere voluptatum recusandae omnis sunt eaque possimus esse soluta dolor dignissimos ab voluptatem. Ex inventore optio rem consequatur perferendis alias. Assumenda expedita consequatur praesentium! Doloribus sint ipsam nemo animi mollitia excepturi recusandae nihil, cupiditate deleniti esse ea perspiciatis non pariatur omnis optio reiciendis distinctio dicta assumenda natus cumque tenetur ad vitae inventore? Nostrum, veniam mollitia. Mollitia accusamus deserunt voluptas enim quam aliquid molestiae dolor rerum fuga nesciunt et maiores quod perferendis fugit atque sed laboriosam similique aut, sapiente corrupti! Explicabo rem praesentium ipsum voluptates qui, debitis, numquam expedita atque nam consequuntur provident maiores autem tempora aut. Exercitationem itaque, vitae nobis adipisci temporibus tempore totam iusto mollitia quas earum quidem aut, beatae consequuntur pariatur optio suscipit ipsa ea voluptatem commodi obcaecati numquam facere officiis. Impedit.',
-  priority: 'low',
-  status: 'done',
-  imageUrl:
-    'https://tiktak.com.vn/wp-content/uploads/2024/04/dieu-hanh-cuoc-hop-hieu-qua-2.jpg',
-  createdOn: new Date('2025-06-20T09:00:00Z'),
-  updatedOn: new Date('2025-06-25T16:00:00Z'),
-  dueDate: new Date('2025-06-26T00:00:00Z'),
+import { getTaskById } from '@/actions/taskActions';
+
+type Props = {
+  params: { id: string };
 };
 
-const TaskDetails = () => {
-  const { title, description, priority, status, imageUrl, dueDate } = task;
+const TaskDetails = async ({ params }: Props) => {
+  const task: Task | null = await getTaskById(params.id);
+
+  if (!task) {
+    notFound();
+  }
+  const { title, description, priority, status, dueDate } = task;
 
   const priorityColorMap = {
     low: 'text-low',
@@ -26,8 +22,8 @@ const TaskDetails = () => {
   };
 
   const statusColorMap = {
-    'not-started': 'text-not-start',
-    'in-progress': 'text-pending',
+    not_started: 'text-not-start',
+    in_progress: 'text-pending',
     done: 'text-completed',
   };
   return (
@@ -35,7 +31,8 @@ const TaskDetails = () => {
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="col-span-1 font-bold text-red-700 mb-3 ">
-            Dued on: <span>{new Date(dueDate).toLocaleDateString()}</span>
+            Dued on:{' '}
+            {dueDate && <span>{new Date(dueDate).toLocaleDateString()}</span>}
           </p>
           <h2 className="font-bold">{title}</h2>
           <p className="col-span-1">
@@ -50,9 +47,9 @@ const TaskDetails = () => {
             <span>{new Date(task.createdOn).toLocaleDateString()}</span>
           </p>
         </div>
-        <div className="rounded-2xl overflow-hidden w-[158px] h-[158px] relative justify-self-end shrink-0">
+        {/* <div className="rounded-2xl overflow-hidden w-[158px] h-[158px] relative justify-self-end shrink-0">
           <Image src={imageUrl} alt={title} fill className="object-cover" />
-        </div>
+        </div> */}
       </div>
       <div>
         <p className="col-span-1 mt-5">

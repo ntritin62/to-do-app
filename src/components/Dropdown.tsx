@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Task } from '@/type/task';
+import { Task } from '@/generated/prisma';
 import { useModal } from '@/context/ModalContext';
 import TaskFormModal from './TaskFormModal';
 
