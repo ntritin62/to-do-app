@@ -106,7 +106,7 @@ export default function TaskFormModal({ task }: TaskFormModalProps) {
         </div>
 
         {/* Task Description & Upload */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-4">
           <div>
             <label className="block mb-1 font-semibold">Task Description</label>
             <textarea
@@ -117,7 +117,7 @@ export default function TaskFormModal({ task }: TaskFormModalProps) {
             />
           </div>
 
-          <div>
+          {/* <div>
             <label className="block mb-1 font-semibold">Upload Image</label>
             <div className="border border-gray-300 rounded p-4 flex flex-col items-center justify-center h-32 text-center text-sm text-gray-500">
               <div className="mb-2 text-3xl">🖼️</div>
@@ -130,14 +130,13 @@ export default function TaskFormModal({ task }: TaskFormModalProps) {
                 Browse
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
       </form>
 
-      {/* Submit Button */}
       <div className="mt-6">
         <button
-          className="bg-orange-500 text-white px-6 py-2 rounded shadow hover:bg-orange-600"
+          className="bg-primary text-white px-6 py-2 rounded shadow hover:bg-orange-600"
           onClick={(e) => {
             e.preventDefault();
             console.log({ title, date, priority, description });

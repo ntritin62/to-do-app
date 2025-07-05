@@ -50,7 +50,7 @@ export default function Home() {
     <div className="col-span-3 p-8 grid grid-cols-2 gap-4">
       <Wrapper className="col-span-1">
         <div className="flex items-center justify-between">
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-between gap-3 mb-2">
             <Image src={Pending} alt="Pending Tasks" width={24} height={24} />
             <h2 className="text-primary">To-Do</h2>
           </div>

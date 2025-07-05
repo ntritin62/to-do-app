@@ -4,7 +4,7 @@ export type Task = {
   description: string;
   priority: TaskPriority;
   status: TaskStatus;
-  imageUrl?: string;
+  // imageUrl?: string;
   createdOn: Date;
   updatedOn?: Date;
   dueDate?: Date;

@@ -50,7 +50,7 @@ const TaskDetails = () => {
             <span>{new Date(task.createdOn).toLocaleDateString()}</span>
           </p>
         </div>
-        <div className="rounded-2xl overflow-hidden w-[158px] h-[158px] relative justify-self-end justify-self-end shrink-0">
+        <div className="rounded-2xl overflow-hidden w-[158px] h-[158px] relative justify-self-end shrink-0">
           <Image src={imageUrl} alt={title} fill className="object-cover" />
         </div>
       </div>

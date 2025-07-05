@@ -12,7 +12,7 @@ const TaskCard = ({ task }: TaskCardProps) => {
   const { title, description, priority, status } = task;
   const circle = (
     <div
-      className={`top-4 left-2 absolute w-4 h-4 border-[2px] rounded-full bg-transparent ${
+      className={`top-2 left-2 absolute w-4 h-4 border-[2px] rounded-full bg-transparent ${
         status === 'done'
           ? 'border-completed'
           : status === 'in-progress'
@@ -35,18 +35,18 @@ const TaskCard = ({ task }: TaskCardProps) => {
   };
 
   return (
-    <section className="px-8 py-4 shadow-md rounded-lg relative">
+    <section className="px-7 py-4 border-1 shadow-xl  border-text-secondary rounded-lg relative">
       {circle}
       <div className="grid grid-cols-12">
         <div className="col-span-7">
           <Link href={`/my-task/${task.id}`}>
             <h2 className="font-bold">{title}</h2>
           </Link>
-          <p className="line-clamp-3 text-text-secondary">{description}</p>
+          <p className="line-clamp-2 text-text-secondary">{description}</p>
         </div>
-        <div className="col-span-5 rounded-2xl overflow-hidden w-[88px] h-[88px] relative justify-self-end">
+        {/* <div className="col-span-5 rounded-2xl overflow-hidden w-[88px] h-[88px] relative justify-self-end">
           <Image src={task.imageUrl} alt={title} fill />
-        </div>
+        </div> */}
       </div>
       <div className="grid grid-cols-3 gap-1 text-[9px] mt-4">
         <p className="col-span-1">
