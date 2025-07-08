@@ -40,7 +40,7 @@ export default async function Home() {
             </Button>
           </div>
         </div>
-        <div className="max-h-[550px] overflow-y-auto">
+        <div className="max-h-[550px] h-[550px] overflow-y-auto">
           <ul className="flex flex-col gap-4">
             {tasks.map((task) => (
               <li key={task.id}>

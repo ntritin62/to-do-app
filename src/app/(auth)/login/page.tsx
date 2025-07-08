@@ -2,24 +2,9 @@
 import Image from 'next/image';
 import { FaUser, FaLock, FaFacebookF, FaGoogle } from 'react-icons/fa';
 import { SiX } from 'react-icons/si';
-import { loginSchema } from '@/schemas/authSchema';
 import { useActionState } from 'react';
 import Link from 'next/link';
-export async function loginAction(prevState: any, formData: FormData) {
-  const data = {
-    email: String(formData.get('email') ?? ''),
-    password: String(formData.get('password') ?? ''),
-  };
-
-  const result = loginSchema.safeParse(data);
-
-  if (!result.success) {
-    const errors = result.error.flatten().fieldErrors;
-    return { success: false, errors };
-  }
-
-  return { success: true };
-}
+import { loginAction } from '@/actions/authActions';
 
 export default function LoginPage() {
   const [state, formAction] = useActionState(loginAction, {
@@ -39,7 +24,9 @@ export default function LoginPage() {
               </span>
               <input
                 type="text"
-                placeholder="Enter Username"
+                placeholder="Enter email"
+                name="email"
+                defaultValue={state?.values?.email ?? ''}
                 className="w-full border border-gray-300 pl-10 pr-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#F96167]"
               />
               {state.errors?.email && (
@@ -53,6 +40,8 @@ export default function LoginPage() {
               <input
                 type="password"
                 placeholder="Enter Password"
+                name="password"
+                defaultValue={state?.values?.password ?? ''}
                 className="w-full border border-gray-300 pl-10 pr-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#F96167]"
               />
               {state.errors?.password && (

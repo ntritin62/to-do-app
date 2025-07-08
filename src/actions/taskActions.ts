@@ -3,6 +3,7 @@
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { getCurrentUserId } from '@/lib/auth';
 
 // CREATE
 export async function createTask(formData: FormData) {
@@ -11,6 +12,11 @@ export async function createTask(formData: FormData) {
   const priority = formData.get('priority') as 'low' | 'medium' | 'high';
   const dueDate = formData.get('dueDate') as string;
 
+  const userId = await getCurrentUserId();
+  if (!userId) {
+    throw new Error('Unauthorized');
+  }
+
   await prisma.task.create({
     data: {
       title,
@@ -18,6 +24,7 @@ export async function createTask(formData: FormData) {
       priority,
       status: 'not_started',
       dueDate: dueDate ? new Date(dueDate) : null,
+      user: { connect: { id: userId } },
     },
   });
 
@@ -34,7 +41,6 @@ export async function getAllTasks() {
 
 // READ ONE
 export async function getTaskById(id: string) {
-  console.log(id);
   return prisma.task.findUnique({
     where: { id },
   });

@@ -2,24 +2,8 @@
 import Image from 'next/image';
 import { FaLock, FaEnvelope } from 'react-icons/fa';
 import { useActionState } from 'react';
-import { registerSchema } from '@/schemas/authSchema';
 import Link from 'next/link';
-export async function registerAction(prevState: any, formData: FormData) {
-  const data = {
-    email: String(formData.get('email') ?? ''),
-    password: String(formData.get('password') ?? ''),
-    confirmPassword: String(formData.get('confirmPassword') ?? ''),
-  };
-
-  const result = registerSchema.safeParse(data);
-
-  if (!result.success) {
-    const errors = result.error.flatten().fieldErrors;
-    return { success: false, errors };
-  }
-
-  return { success: true };
-}
+import { registerAction } from '@/actions/authActions';
 export default function RegisterPage() {
   const [state, formAction] = useActionState(registerAction, {
     success: false,
@@ -50,6 +34,8 @@ export default function RegisterPage() {
               <input
                 type="email"
                 placeholder="Enter Email"
+                name="email"
+                defaultValue={state?.values?.email ?? ''}
                 className="w-full border border-gray-300 pl-10 pr-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#F96167]"
               />
               {state.errors?.email && (
@@ -64,6 +50,8 @@ export default function RegisterPage() {
               <input
                 type="password"
                 placeholder="Enter Password"
+                name="password"
+                defaultValue={state?.values?.password ?? ''}
                 className="w-full border border-gray-300 pl-10 pr-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#F96167]"
               />
               {state.errors?.password && (
@@ -78,6 +66,8 @@ export default function RegisterPage() {
               <input
                 type="password"
                 placeholder="Confirm Password"
+                name="confirmPassword"
+                defaultValue={state?.values?.confirmPassword ?? ''}
                 className="w-full border border-gray-300 pl-10 pr-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#F96167]"
               />
               {state.errors?.confirmPassword && (
