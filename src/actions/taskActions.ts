@@ -34,15 +34,25 @@ export async function createTask(formData: FormData) {
 
 // READ ALL
 export async function getAllTasks() {
+  const userId = await getCurrentUserId();
+  if (!userId) throw new Error('Unauthorized');
+
   return prisma.task.findMany({
+    where: { userId },
     orderBy: { createdOn: 'desc' },
   });
 }
 
 // READ ONE
 export async function getTaskById(id: string) {
-  return prisma.task.findUnique({
-    where: { id },
+  const userId = await getCurrentUserId();
+  if (!userId) throw new Error('Unauthorized');
+
+  return prisma.task.findFirst({
+    where: {
+      id,
+      userId,
+    },
   });
 }
 
@@ -102,11 +112,14 @@ export async function updateTaskStatus(formData: FormData) {
 }
 
 export async function getTaskStatusStats() {
+  const userId = await getCurrentUserId();
+  if (!userId) throw new Error('Unauthorized');
+
   const [done, inProgress, notStarted, total] = await Promise.all([
-    prisma.task.count({ where: { status: 'done' } }),
-    prisma.task.count({ where: { status: 'in_progress' } }),
-    prisma.task.count({ where: { status: 'not_started' } }),
-    prisma.task.count(),
+    prisma.task.count({ where: { userId, status: 'done' } }),
+    prisma.task.count({ where: { userId, status: 'in_progress' } }),
+    prisma.task.count({ where: { userId, status: 'not_started' } }),
+    prisma.task.count({ where: { userId } }),
   ]);
 
   const toPercent = (count: number) =>

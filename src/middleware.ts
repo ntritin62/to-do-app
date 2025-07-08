@@ -18,7 +18,14 @@ export async function middleware(req: NextRequest) {
       await jwtVerify(token, JWT_SECRET);
       return NextResponse.next();
     } catch {
-      return NextResponse.redirect(new URL('/login', req.url));
+      const res = NextResponse.redirect(new URL('/login', req.url));
+      res.cookies.set({
+        name: 'token',
+        value: '',
+        path: '/',
+        maxAge: 0,
+      });
+      return res;
     }
   }
 
@@ -27,7 +34,14 @@ export async function middleware(req: NextRequest) {
       await jwtVerify(token, JWT_SECRET);
       return NextResponse.redirect(new URL('/', req.url));
     } catch {
-      return NextResponse.next();
+      const res = NextResponse.next();
+      res.cookies.set({
+        name: 'token',
+        value: '',
+        path: '/',
+        maxAge: 0,
+      });
+      return res;
     }
   }
 
